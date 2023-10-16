@@ -2,7 +2,13 @@
 
 based on the programming guide of siglent. 
 
-instal 
-```
+installs needed :
+
+
+```bash
 pip install pyvisa
 ```
+```bash
+pip install numpy 
+```
+
