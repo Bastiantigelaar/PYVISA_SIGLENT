@@ -4,11 +4,11 @@ based on the programming guide of siglent.
 
 installs needed :
 
-first:
+first install:
 ```bash
 pip install pyvisa
 ```
-second:
+second install:
 ```bash
 pip install numpy 
 ```
