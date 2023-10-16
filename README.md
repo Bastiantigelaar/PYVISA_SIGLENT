@@ -3,4 +3,6 @@
 based on the programming guide of siglent. 
 
 instal 
-~install pip pyvisa
+```
+pip install pyvisa
+```
