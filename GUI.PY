@@ -53,6 +53,16 @@ def select_arb():
         functie_generator.write('C1:BSWV WVTP,ARB')
     except:
         print("an error occurred")
+# sweep
+def select_sweep():
+    try:
+        hide_before_sweep()
+        sweeplabelentries.grid(row = 0, column=0)
+        
+        functie_generator.write('C1:SWWV STATE,ON')
+    except:
+        print("an error occurred")
+
 # hide buttons....
 def hide_boxes():
     try:
@@ -60,8 +70,16 @@ def hide_boxes():
         entrydutycycle.grid_forget()
     except:
         print("an error occurred")
-
-
+def hide_before_sweep():
+    try: 
+        frame_labels_entries.grid_forget()
+    except:
+        print("an error occurred")
+def hide_after_sweep():
+    try:
+        sweeplabelentries.grid_forget()
+    except:
+        print("an error occurred")
 # set to function generator
 def set_values():
     try:
@@ -97,12 +115,29 @@ def set_values():
             print("fault dutycycle")
     except:
         print("error occurred")
+def set_sweep():
+    try:
+        sweep_time = float(entrie_sweep_time.get())
+        sweep_stop = float(entrie_sweep_stopfrequenctie.get())
+        sweep_start = float(entrie_sweep_startfrequenctie.get())
+
+        print("dit is de sweep time ", sweep_time, " dit is de sweep stop",sweep_stop," dit is de start ",sweep_start)
+        if(sweep_time < 0):
+            print("vul een tijd groter dan 0 in")
+            sweep_time = 0.001
+        
+        functie_generator.write(f'C1:SWWV TIME,{sweep_time}') 
+        functie_generator.write(f'C1:SWWV STOP,{sweep_stop}') 
+        functie_generator.write(f'C1:SWWV START,{sweep_start}')  
+        functie_generator.write('C1:SWWV STATE,ON')    
+    except:
+        print("an error occurred")
 
 
 # Open a resource manager..
-rm = pyvisa.ResourceManager()
 # the devices connected to it, now only function generator works..
 #scope = rm.open_resource('USB0::0x049F::0x505E::CN2210029021121::INSTR')
+rm = pyvisa.ResourceManager()
 functie_generator = rm.open_resource('USB0::0xF4ED::0xEE3A::SDG08CBC7R0184::0::INSTR') #functie generator thuis 
 #test IDN 
 #print(scope.query("*IDN?"))
@@ -119,73 +154,112 @@ window.configure(bg="#99d6ff")
 
 # button sinus 
 button_sinus = tk.Button(window, text = "sinus", command=select_sinus)
-button_sinus.grid(row = 0, column = 0, sticky=tk.W)
+button_sinus.grid(row = 7, column = 0, sticky=tk.W)
 # button blok
-button_sinus = tk.Button(window, text = "blok", command=select_blok)
-button_sinus.grid(row = 0, column = 1, sticky=tk.W)
+button_blok = tk.Button(window, text = "blok", command=select_blok)
+button_blok.grid(row = 7, column = 1, sticky=tk.W)
 # button ramp 
-button_sinus = tk.Button(window, text = "ramp", command=select_ramp)
-button_sinus.grid(row = 0, column = 2, sticky=tk.W)
+button_ramp = tk.Button(window, text = "ramp", command=select_ramp)
+button_ramp.grid(row = 7, column = 2, sticky=tk.W)
 # button pulse 
-button_sinus = tk.Button(window, text = "pulse", command=select_pulse)
-button_sinus.grid(row = 0, column = 3, sticky=tk.W)
+button_pulse = tk.Button(window, text = "pulse", command=select_pulse)
+button_pulse.grid(row = 7, column = 3, sticky=tk.W)
 # button noise
-button_sinus = tk.Button(window, text = "noise", command=select_noise)
-button_sinus.grid(row = 0, column = 4, sticky=tk.W)
+button_noise = tk.Button(window, text = "noise", command=select_noise)
+button_noise.grid(row = 7, column = 4, sticky=tk.W)
 #button arb
-button_sinus = tk.Button(window, text = "arb", command=select_arb)
-button_sinus.grid(row = 0, column = 5, sticky=tk.W)
+button_arb = tk.Button(window, text = "arb", command=select_arb)
+button_arb.grid(row = 7, column = 5, sticky=tk.W)
+# sweep / eigen functie bepalen 
+button_sweep = tk.Button(window, text = "sweep", command=select_sweep)
+button_sweep.grid(row = 7, column = 6, sticky=tk.W)
 
+
+
+
+
+frame_labels_entries = tk.Frame(window)
+frame_labels_entries.grid(row = 0,column=0)
 # invul informatie over de sinus format...
 # frequency 
-labelfrequenctie = tk.Label(window,text="Vul hier de Ferquentie in ")
+labelfrequenctie = tk.Label(frame_labels_entries,text="Vul hier de Ferquentie in ")
 labelfrequenctie.grid(row = 1, column = 0, sticky=tk.W)
 
-entryfrequenctie = tk.Entry(window)
+entryfrequenctie = tk.Entry(frame_labels_entries)
 entryfrequenctie.grid(row = 1, column=1,sticky=tk.W)
 
 #amplitude 
 
-labelamplitude = tk.Label(window,text="Vul hier de amplitude in ")
+labelamplitude = tk.Label(frame_labels_entries,text="Vul hier de amplitude in ")
 labelamplitude.grid(row = 2, column = 0, sticky=tk.W)
 
-entryamplitude = tk.Entry(window)
+entryamplitude = tk.Entry(frame_labels_entries)
 entryamplitude.grid(row = 2, column=1,sticky=tk.W)
 # offset 
-labeloffset = tk.Label(window,text="Vul hier de offset in ")
+labeloffset = tk.Label(frame_labels_entries,text="Vul hier de offset in ")
 labeloffset.grid(row = 3, column = 0, sticky=tk.W)
 
-entryoffset = tk.Entry(window)
+entryoffset = tk.Entry(frame_labels_entries)
 entryoffset.grid(row = 3, column=1,sticky=tk.W)
 
 # phase 
 
-labelphase = tk.Label(window,text="Vul hier de fase in ")
+labelphase = tk.Label(frame_labels_entries,text="Vul hier de fase in ")
 labelphase.grid(row = 4, column = 0, sticky=tk.W)
 
-entryphase = tk.Entry(window)
+entryphase = tk.Entry(frame_labels_entries)
 entryphase.grid(row = 4, column=1,sticky=tk.W)
 
 # duty cycle 
 
-labeldutycycle = tk.Label(window,text="vul hier de duty cycle in ")
+labeldutycycle = tk.Label(frame_labels_entries,text="vul hier de duty cycle in ")
 labeldutycycle.grid(row = 5, column = 0, sticky=tk.W)
 
-entrydutycycle = tk.Entry(window)
+entrydutycycle = tk.Entry(frame_labels_entries)
 entrydutycycle.grid(row = 5, column=1,sticky=tk.W)
-hide_boxes() 
-
 # ACCEPT CHANGES BUTTON 
 
 checkbutton = tk.Button(window, text = "Check", command = set_values)
 checkbutton.grid(row = 6, column = 0, sticky=tk.W)
+
+hide_boxes() 
+
+sweeplabelentries = tk.Frame(window)
+sweeplabelentries.grid(row = 0,column=0)
+
+# sweep time
+label_sweep_time = tk.Label(sweeplabelentries,text="vul hier de sweep time in")
+label_sweep_time.grid(row = 1,column= 0)
+entrie_sweep_time = tk.Entry(sweeplabelentries)
+entrie_sweep_time.grid(row = 1,column= 1)
+
+# start frequenctie 
+
+label_sweep_startfrequenctie = tk.Label(sweeplabelentries,text="vul hier de start frequentie in")
+label_sweep_startfrequenctie.grid(row = 2,column= 0)
+entrie_sweep_startfrequenctie = tk.Entry(sweeplabelentries)
+entrie_sweep_startfrequenctie.grid(row = 2,column= 1)
+
+# stop frequentie
+
+label_sweep_stopfrequenctie = tk.Label(sweeplabelentries,text="vul hier de stop frequentie in")
+label_sweep_stopfrequenctie.grid(row = 3,column= 0)
+entrie_sweep_stopfrequenctie = tk.Entry(sweeplabelentries)
+entrie_sweep_stopfrequenctie.grid(row = 3,column= 1)
+
+# check button for sweeep 
+checkbutton_sweep = tk.Button(window, text = "Check", command = set_sweep)
+checkbutton_sweep.grid(row = 6, column = 0, sticky=tk.W)
+
+hide_after_sweep()
+
 
 
 
 
 start_frequency = 1
 
-functie_generator.write('C1:BSWV WVTP,SINE')
+#functie_generator.write('C1:BSWV WVTP,SINE')
 window.mainloop()
 #while start_frequency != 460:
  #   functie_generator.write(f'C1:BSWV FRQ,{start_frequency}')
