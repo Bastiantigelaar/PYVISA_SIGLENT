@@ -6,7 +6,7 @@ right now i am working on the scope functions and the looks of the gui.
 
 # supported devices:
 ## scopes:
-TDS200,TDS1000, TDS2000, and TPS2000 Series Digital Oscilloscopes, (wokring on the hantek scope)
+TDS200,TDS1000, TDS2000, and TPS2000 Series Digital Oscilloscopes, (working on the hantek scope)
 ## function generators: 
 all siglent generators
 
