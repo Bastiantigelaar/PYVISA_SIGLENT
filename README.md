@@ -3,9 +3,9 @@
 based on the programming guide of siglent and tektronix.
 
 supported devices:
-#scopes:
+# scopes:
 TDS200,TDS1000, TDS2000, and TPS2000 Series Digital Oscilloscopes
-#function generators: 
+# function generators: 
 all siglent 
 
 installs needed :
