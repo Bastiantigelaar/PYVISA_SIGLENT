@@ -1,4 +1,4 @@
-# Basic GUI with SIGLENT FUNCTION GENERATER
+# Basic GUI with PYVISA for scope and function generator
 
 based on the programming guide of siglent and tektronix.
 right now i am working on the scope functions and the looks of the gui. 
