@@ -4,7 +4,7 @@ based on the programming guide of siglent and tektronix.
 # currently working on 
 replacing all the tkinter with customtkinter
 # documentation
-all customer tkinter comes from the documantation of there [github](https://github.com/TomSchimansky/CustomTkinter)
+all customertkinter code comes from the documantation of there [github](https://github.com/TomSchimansky/CustomTkinter)
 
 # supported devices:
 ## scopes:
