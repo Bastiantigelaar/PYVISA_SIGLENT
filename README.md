@@ -5,7 +5,7 @@ based on the programming guide of siglent and tektronix.
 replacing all the tkinter with customtkinter
 # documentation
 
-[customtkinter github pagine](https://github.com/TomSchimansky/CustomTkinter)
+[customtkinter github page](https://github.com/TomSchimansky/CustomTkinter)
 
 # supported devices:
 ## scopes:
