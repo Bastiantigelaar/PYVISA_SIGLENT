@@ -1,8 +1,11 @@
 # Basic GUI with PYVISA for scope and function generator
 
 based on the programming guide of siglent and tektronix.
-right now i am working on the scope functions and the looks of the gui. 
+# currently working on 
+replacing all the tkinter with customtkinter
+# documentation
 
+[customtkinter github pagine](https://github.com/TomSchimansky/CustomTkinter)
 
 # supported devices:
 ## scopes:
