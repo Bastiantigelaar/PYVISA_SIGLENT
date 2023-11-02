@@ -1,6 +1,7 @@
 # Basic GUI with PYVISA for scope and function generator
 # The function generator GUI
-![image](https://github.com/basktanios/PYVISA_SIGLENT/assets/108866346/2dd622d3-6b3e-40d5-a120-28c93d43e24a)
+![Uploading image.png…]()
+
 # The scope GUI
 
 based on the programming guide of siglent and tektronix.
