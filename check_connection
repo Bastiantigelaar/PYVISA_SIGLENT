@@ -1,0 +1,9 @@
+# this script connectes to the device and reads it IDN
+import pyvisa
+# Open a resource manager..
+rm = pyvisa.ResourceManager()
+
+# the devices connected to it
+device = rm.open_resource('USB0::0xF4ED::0xEE3A::SDG08CBC7R0184::0::INSTR') #functie generator thuis 
+#test IDN 
+print(device.query("*IDN?"))
