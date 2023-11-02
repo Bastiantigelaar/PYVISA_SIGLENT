@@ -1,6 +1,7 @@
 # Basic GUI with PYVISA for scope and function generator
 # The function generator GUI
-![Uploading image.png…]()
+![image](https://github.com/basktanios/PYVISA_SIGLENT/assets/108866346/d82793e8-1ffa-4d55-a1d1-cb8098f8d916)
+
 
 # The scope GUI
 
