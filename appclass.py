@@ -1,6 +1,7 @@
 import tkinter
 import tkinter.messagebox
 import customtkinter
+from functools import partial 
 import pyvisa
 import time 
 
@@ -20,7 +21,7 @@ class App(customtkinter.CTk):
      
      # create tabview
 
-        self.tabview = customtkinter.CTkTabview(self, width=760) 
+        self.tabview = customtkinter.CTkTabview(self, width=860) 
         self.tabview.grid(row=0, column=0, padx=(20, 0), pady=(40, 0), sticky="nsew")
         self.tabview.add("SINUS")
         self.tabview.add("BLOK")
@@ -117,9 +118,15 @@ class App(customtkinter.CTk):
        # setup the function generator
     def config_sinus(self):
     # CONFIGURATION OF THE SINUS SIGNAL 
+     # sweep on or off 
+        self.naam = customtkinter.StringVar(value="SINUS")
+        self.switch_var = customtkinter.StringVar(value="off")
+        self.switch = customtkinter.CTkSwitch(self.tabview.tab("SINUS"), text="sweep mode", command=self.sweep_on,
+                                 variable=self.switch_var, onvalue="on", offvalue="off")
+        self.switch.place(relx = 0, rely = 0)
      # default values 
         alling_x_for_buttons = 0.1
-        alling_x_for_entries = 0.45
+        alling_x_for_entries = 0.28
      # frequency
         self.labelfrequenctie = customtkinter.CTkLabel(self.tabview.tab("SINUS"),text="Vul hier de Ferquentie in ")
         self.labelfrequenctie.place(relx = alling_x_for_buttons, rely = 0.12)
@@ -158,7 +165,7 @@ class App(customtkinter.CTk):
     # CONFIGURATION OF THE BLOK SIGNAL 
      # default values 
         alling_x_for_buttons = 0.1
-        alling_x_for_entries = 0.45
+        alling_x_for_entries = 0.28
      # frequency
         self.labelfrequenctie = customtkinter.CTkLabel(self.tabview.tab("BLOK"),text="Vul hier de Ferquentie in ")
         self.labelfrequenctie.place(relx = alling_x_for_buttons, rely = 0.12)
@@ -218,7 +225,7 @@ class App(customtkinter.CTk):
     # CONFIGURATION OF THE RAMP 
        # default values 
         alling_x_for_buttons = 0.1
-        alling_x_for_entries = 0.45
+        alling_x_for_entries = 0.28
        # frequency
         self.labelfrequenctie = customtkinter.CTkLabel(self.tabview.tab("RAMP"),text="Vul hier de Ferquentie in ")
         self.labelfrequenctie.place(relx = alling_x_for_buttons, rely = 0.12)
@@ -259,3 +266,42 @@ class App(customtkinter.CTk):
             return functie_generator
           except:
             print("functie_generator not found -> error try check_connection.py or search_connection.py on the github page")
+    def sweep_on(self):
+        print("switch was toggled: ", self.switch_var.get())
+        naam = self.naam.get()
+        print("switch was toggled: ", self.switch_var.get())
+        
+        #naam = "SINUS"
+        if self.switch_var.get() == "on":
+            alling_x_for_buttons = 0.50
+            alling_x_for_entries = 0.78
+          # time value 
+            self.labeltime = customtkinter.CTkLabel(self.tabview.tab(naam),text="Vul hier de tijd in")
+            self.labeltime.place(relx = alling_x_for_buttons, rely = 0.12)
+
+            self.swentrytime = customtkinter.CTkEntry(self.tabview.tab(naam))
+            self.swentrytime.place(relx = alling_x_for_entries, rely = 0.12)
+
+          # start frequency
+            self.labelstart = customtkinter.CTkLabel(self.tabview.tab(naam),text="Vul hier de start frequentie in")
+            self.labelstart.place(relx = alling_x_for_buttons, rely = 0.20)
+
+            self.swentrystart = customtkinter.CTkEntry(self.tabview.tab(naam))
+            self.swentrystart.place(relx = alling_x_for_entries, rely = 0.20)
+          # stop frequency
+            self.labelstop = customtkinter.CTkLabel(self.tabview.tab(naam),text="Vul hier de stop frequentie in")
+            self.labelstop.place(relx = alling_x_for_buttons, rely = 0.28)
+
+            self.swentrystop = customtkinter.CTkEntry(self.tabview.tab(naam))
+            self.swentrystop.place(relx = alling_x_for_entries, rely = 0.28)
+            print("switch was toggled: ", self.switch_var.get())
+        else: 
+            print("switch was toggled: ", self.switch_var.get())
+            self.labeltime.place_forget()
+            self.swentrytime.place_forget()
+            
+            self.labelstop.place_forget()
+            self.swentrystop.place_forget()
+            
+            self.labelstart.place_forget()
+            self.swentrystart.place_forget()
