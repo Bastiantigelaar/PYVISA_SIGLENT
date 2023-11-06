@@ -46,6 +46,7 @@ class App(customtkinter.CTk):
         self.config_sinus()
         self.config_blok()
         self.config_ramp()
+        self.config_noise()
 
     def get_values_sinus(self):
         try:
@@ -100,6 +101,14 @@ class App(customtkinter.CTk):
           self.set_value_sweep(sweep_time,sweep_stop,sweep_start)
       except:
           print("an error occured reading values of enterd values of sweep")
+    def get_values_noise(self):
+        try:
+            stdev = float(self.nentrysd.get())
+            mean = float(self.nentrymean.get())
+            print("the value of the sweeps are : ", stdev, " " , mean)
+            self.set_value_noise(stdev,mean)
+        except:
+            print("an error occured reading values of enterd values of noise")      
 
     def set_value_sinus(self,amp,fre,phase,offset):
         try:
@@ -116,6 +125,8 @@ class App(customtkinter.CTk):
             functie_generator.write(f'C1:BSWV OFST,{offset}')
             time.sleep(0.2)
             functie_generator.write(f'C1:BSWV PHSE,{phase}')
+            time.sleep(0.2)
+            functie_generator.write('C1:OUTP ON')
 
             
             print("De ingevulde waarde zijn ", "amp ", amp, " freq", fre)
@@ -140,7 +151,9 @@ class App(customtkinter.CTk):
             time.sleep(0.2)
             functie_generator.write(f'C1:BSWV PHSE,{phase}')
             time.sleep(0.2)
-            functie_generator.write(f'C1:BSWV DUTY,{duty}') 
+            functie_generator.write(f'C1:BSWV DUTY,{duty}')
+            time.sleep(0.2)
+            functie_generator.write('C1:OUTP ON')
          except:
              print("the blok waveform could not be set properly")     
     def set_value_ramp(self,fre,phase,offset,low,high,sym ):
@@ -162,9 +175,21 @@ class App(customtkinter.CTk):
             functie_generator.write(f'C1:BSWV PHSE,{phase}')
             time.sleep(0.2)
             functie_generator.write(f'C1:BSWV SYM,{sym}') 
+            time.sleep(0.2)
+            functie_generator.write('C1:OUTP ON')
 
-
-
+    def set_value_noise(self,stdev,mean):
+           try:
+               functie_generator = self.config_functie_generator()
+               functie_generator.write('C1:BSWV WVTP,NOISE')
+               time.sleep(0.2)
+               functie_generator.write(f'C1:BSWV STDEV,{stdev}')
+               time.sleep(0.2)
+               functie_generator.write(f'C1:BSWV MEAN,{mean}')
+               time.sleep(0.2)
+               functie_generator.write('C1:OUTP ON')
+           except:
+               print("an error occurred while setting up the noise signal...")
     def set_value_sweep(self,sweep_time,sweep_stop,sweep_start):
            try:
                functie_generator = self.config_functie_generator()
@@ -175,6 +200,8 @@ class App(customtkinter.CTk):
                functie_generator.write(f'C1:SWWV START,{sweep_start}')  
                time.sleep(0.2)
                functie_generator.write('C1:SWWV STATE,ON')
+               time.sleep(0.2)
+               functie_generator.write('C1:OUTP ON')
                print("set is called")
            except:
                print("an error occured during set")
@@ -291,7 +318,7 @@ class App(customtkinter.CTk):
         self.checkbutton.place(relx = alling_x_for_entries, rely = 0.60)
 
     def config_ramp(self):
-        # CONFIGURATION OF THE BLOK SIGNAL 
+   # CONFIGURATION OF THE RAMP SIGNAL 
      # sweep on or off 
         self.naam = customtkinter.StringVar(value="off")
         self.switch_var3 = customtkinter.StringVar(value="off")
@@ -347,6 +374,26 @@ class App(customtkinter.CTk):
 
         self.checkbutton = customtkinter.CTkButton(self.tabview.tab("RAMP"), text = "Check", command = self.get_values_ramp)
         self.checkbutton.place(relx = alling_x_for_entries, rely = 0.60)
+    def config_noise(self):
+   # CONFIGURATION OF THE NOISE SIGNAL 
+     # default values 
+        alling_x_for_buttons = 0.1
+        alling_x_for_entries = 0.28
+     # standaard deviation 
+        self.labelsd = customtkinter.CTkLabel(self.tabview.tab("NOISE"),text="Vul hier de STdev in ")
+        self.labelsd.place(relx = alling_x_for_buttons, rely = 0.12)
+
+        self.nentrysd = customtkinter.CTkEntry(self.tabview.tab("NOISE"))
+        self.nentrysd .place(relx = alling_x_for_entries, rely = 0.12)
+     # mean 
+        self.labelmean = customtkinter.CTkLabel(self.tabview.tab("NOISE"),text="Vul hier de mean in ")
+        self.labelmean.place(relx = alling_x_for_buttons, rely = 0.20)
+
+        self.nentrymean  = customtkinter.CTkEntry(self.tabview.tab("NOISE"))
+        self.nentrymean.place(relx = alling_x_for_entries, rely = 0.20)
+     # check box 
+        self.checkbutton = customtkinter.CTkButton(self.tabview.tab("NOISE"), text = "Check", command = self.get_values_noise)
+        self.checkbutton.place(relx = alling_x_for_entries, rely = 0.28) 
 
     def config_functie_generator(self):
           try:
@@ -494,3 +541,4 @@ class App(customtkinter.CTk):
                self.labelstart.place_forget()
                self.swentrystart.place_forget()
                self.checkbutton2.place_forget()
+      
