@@ -1,7 +1,7 @@
-import tkinter
-import tkinter.messagebox
+#import tkinter
+#import tkinter.messagebox
 import customtkinter
-from functools import partial 
+#from functools import partial 
 import pyvisa
 import time 
 
@@ -78,13 +78,17 @@ class App(customtkinter.CTk):
     
     def get_values_ramp(self):
         try:
-            amp = float(self.rentryamplitude.get())
             fre = float(self.rentryfrequenctie.get())
             phase = float(self.rentryphase.get())
             offset = float(self.rentryoffset.get())
-            print("De waardes die zijn ingevuld zijn .. " , amp, " ", fre, " ", phase," " ,offset)
+            low = float(self.rentrylowlevel.get())
+            high = float(self.rentryhighlevel.get())
+            sym = float(self.rentrysymmetry.get())
+            self.set_value_ramp(fre,phase,offset,low,high,sym)
+            print("de waardes zijn ", fre," ", offset," ",  high," ", low, " ", sym)
         except:
             print("error with reading values of enterd values of blok")
+
     def get_values_sweep(self):
       try:
           sweep_time = float(self.swentrytime.get())
@@ -106,8 +110,11 @@ class App(customtkinter.CTk):
             print("dit is de waarde van de functie generator" , functie_generator)
             functie_generator.write('C1:BSWV WVTP,SINE')   
             functie_generator.write(f'C1:BSWV FRQ,{fre}')
+            time.sleep(0.2)
             functie_generator.write(f'C1:BSWV AMP,{amp}')
+            time.sleep(0.2)
             functie_generator.write(f'C1:BSWV OFST,{offset}')
+            time.sleep(0.2)
             functie_generator.write(f'C1:BSWV PHSE,{phase}')
 
             
@@ -136,13 +143,37 @@ class App(customtkinter.CTk):
             functie_generator.write(f'C1:BSWV DUTY,{duty}') 
          except:
              print("the blok waveform could not be set properly")     
+    def set_value_ramp(self,fre,phase,offset,low,high,sym ):
+            functie_generator = self.config_functie_generator()
+            print("dit is de waarde van de functie generator" , functie_generator)
+            amp = high - low
+            functie_generator.write('C1:BSWV WVTP,RAMP')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV FRQ,{fre}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV HLEV,{high}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV LLEV,{low}') 
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV AMP,{amp}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV OFST,{offset}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV PHSE,{phase}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV SYM,{sym}') 
+
+
 
     def set_value_sweep(self,sweep_time,sweep_stop,sweep_start):
            try:
                functie_generator = self.config_functie_generator()
-               functie_generator.write(f'C1:SWWV TIME,{sweep_time}') 
-               functie_generator.write(f'C1:SWWV STOP,{sweep_stop}') 
+               functie_generator.write(f'C1:SWWV TIME,{sweep_time}')
+               time.sleep(0.2) 
+               functie_generator.write(f'C1:SWWV STOP,{sweep_stop}')
+               time.sleep(0.2) 
                functie_generator.write(f'C1:SWWV START,{sweep_start}')  
+               time.sleep(0.2)
                functie_generator.write('C1:SWWV STATE,ON')
                print("set is called")
            except:
@@ -260,43 +291,63 @@ class App(customtkinter.CTk):
         self.checkbutton.place(relx = alling_x_for_entries, rely = 0.60)
 
     def config_ramp(self):
-    # CONFIGURATION OF THE RAMP 
-       # default values 
+        # CONFIGURATION OF THE BLOK SIGNAL 
+     # sweep on or off 
+        self.naam = customtkinter.StringVar(value="off")
+        self.switch_var3 = customtkinter.StringVar(value="off")
+        self.switch3 = customtkinter.CTkSwitch(self.tabview.tab("RAMP"), text="sweep mode", command=self.sweep_on,
+                                 variable=self.switch_var3, onvalue="on", offvalue="off")
+        self.switch3.place(relx = 0, rely = 0)
+     # default values 
         alling_x_for_buttons = 0.1
         alling_x_for_entries = 0.28
-       # frequency
+     # frequency
         self.labelfrequenctie = customtkinter.CTkLabel(self.tabview.tab("RAMP"),text="Vul hier de Ferquentie in ")
         self.labelfrequenctie.place(relx = alling_x_for_buttons, rely = 0.12)
 
         self.rentryfrequenctie = customtkinter.CTkEntry(self.tabview.tab("RAMP"))
         self.rentryfrequenctie.place(relx = alling_x_for_entries, rely = 0.12)
+     # high level
+        self.labelhighlevel = customtkinter.CTkLabel(self.tabview.tab("RAMP"),text="Vul hier de high level in ")
+        self.labelhighlevel.place(relx = alling_x_for_buttons, rely = 0.20)
 
-     # amplitude 
+        self.rentryhighlevel = customtkinter.CTkEntry(self.tabview.tab("RAMP"))
+        self.rentryhighlevel.place(relx = alling_x_for_entries, rely = 0.20)
 
-        self.labelamplitude = customtkinter.CTkLabel(self.tabview.tab("RAMP"),text="Vul hier de amplitude in ")
-        self.labelamplitude.place(relx = alling_x_for_buttons, rely = 0.20)
+     # low level
+        self.labellowlevel = customtkinter.CTkLabel(self.tabview.tab("RAMP"),text="Vul hier de low level in ")
+        self.labellowlevel.place(relx = alling_x_for_buttons, rely = 0.28)
 
-        self.rentryamplitude = customtkinter.CTkEntry(self.tabview.tab("RAMP"))
-        self.rentryamplitude.place(relx = alling_x_for_entries, rely = 0.20)
+        self.rentrylowlevel = customtkinter.CTkEntry(self.tabview.tab("RAMP"))
+        self.rentrylowlevel.place(relx = alling_x_for_entries, rely = 0.28)
+     
      # offset 
         self.labeloffset = customtkinter.CTkLabel(self.tabview.tab("RAMP"),text="Vul hier de offset in ")
-        self.labeloffset.place(relx = alling_x_for_buttons, rely = 0.28)
+        self.labeloffset.place(relx = alling_x_for_buttons, rely = 0.36)
 
         self.rentryoffset = customtkinter.CTkEntry(self.tabview.tab("RAMP"))
-        self.rentryoffset.place(relx = alling_x_for_entries, rely = 0.28)
+        self.rentryoffset.place(relx = alling_x_for_entries, rely = 0.36)
 
      # phase 
 
         self.labelphase = customtkinter.CTkLabel(self.tabview.tab("RAMP"),text="Vul hier de fase in ")
-        self.labelphase.place(relx = alling_x_for_buttons, rely = 0.36)
+        self.labelphase.place(relx = alling_x_for_buttons, rely = 0.44)
 
         self.rentryphase = customtkinter.CTkEntry(self.tabview.tab("RAMP"))
-        self.rentryphase.place(relx = alling_x_for_entries, rely = 0.36)
+        self.rentryphase.place(relx = alling_x_for_entries, rely = 0.44)
+     # duty cycle
+
+        self.labelsymmetry = customtkinter.CTkLabel(self.tabview.tab("RAMP"),text="Vul hier de symmerty in")
+        self.labelsymmetry.place(relx = alling_x_for_buttons, rely = 0.52)
+
+        self.rentrysymmetry = customtkinter.CTkEntry(self.tabview.tab("RAMP"))
+        self.rentrysymmetry.place(relx = alling_x_for_entries, rely = 0.52)
         
      # accept changes 
 
         self.checkbutton = customtkinter.CTkButton(self.tabview.tab("RAMP"), text = "Check", command = self.get_values_ramp)
-        self.checkbutton.place(relx = alling_x_for_entries, rely = 0.54)
+        self.checkbutton.place(relx = alling_x_for_entries, rely = 0.60)
+
     def config_functie_generator(self):
           try:
             
@@ -309,14 +360,15 @@ class App(customtkinter.CTk):
     def sweep_on(self):
         print("switch1 was toggled: ", self.switch_var1.get())
         print("switch2 was toggled: ", self.switch_var2.get())
+        print("switch3 was toggled: ", self.switch_var3.get())
         print("the current tab" , self.tabview.get())
         if self.tabview.get() == "SINUS":
          self.configure_sweep_sinus()
         elif self.tabview.get() == "BLOK":  
          self.configure_sweep_blok()
-        else:
-            print("an error") 
-    
+        elif self.tabview.get() == "RAMP":
+         self.configure_sweep_ramp()
+        
     
     
     def configure_sweep_sinus(self):
@@ -362,8 +414,49 @@ class App(customtkinter.CTk):
                self.checkbutton2.place_forget()
     def configure_sweep_blok(self):
             #print( "dit is de naam meegeven", naam)
-            
+           
             if self.switch_var2.get() == "on": 
+               temp =  self.tabview.get()
+               print("ik kom in de if")
+               alling_x_for_buttons = 0.50
+               alling_x_for_entries = 0.78
+            # time value 
+               self.labeltime = customtkinter.CTkLabel(self.tabview.tab(temp),text="Vul hier de tijd in")
+               self.labeltime.place(relx = alling_x_for_buttons, rely = 0.12)
+
+               self.swentrytime = customtkinter.CTkEntry(self.tabview.tab(temp))
+               self.swentrytime.place(relx = alling_x_for_entries, rely = 0.12)
+
+            # start frequency
+               self.labelstart = customtkinter.CTkLabel(self.tabview.tab(temp),text="Vul hier de start frequentie in")
+               self.labelstart.place(relx = alling_x_for_buttons, rely = 0.20)
+
+               self.swentrystart = customtkinter.CTkEntry(self.tabview.tab(temp))
+               self.swentrystart.place(relx = alling_x_for_entries, rely = 0.20)
+            # stop frequency
+               self.labelstop = customtkinter.CTkLabel(self.tabview.tab(temp),text="Vul hier de stop frequentie in")
+               self.labelstop.place(relx = alling_x_for_buttons, rely = 0.28)
+
+               self.swentrystop = customtkinter.CTkEntry(self.tabview.tab(temp))
+               self.swentrystop.place(relx = alling_x_for_entries, rely = 0.28)
+
+               self.checkbutton2 = customtkinter.CTkButton(self.tabview.tab(temp), text = "Check", command = self.get_values_sweep)
+               self.checkbutton2.place(relx = alling_x_for_entries, rely = 0.60)     
+            else: 
+               print("ïk kom in de else ")
+               self.labeltime.place_forget()
+               self.swentrytime.place_forget()
+               
+               self.labelstop.place_forget()
+               self.swentrystop.place_forget()
+               
+               self.labelstart.place_forget()
+               self.swentrystart.place_forget()
+               self.checkbutton2.place_forget()
+    def configure_sweep_ramp(self):
+         #print( "dit is de naam meegeven", naam)
+            print("====",self.switch_var3.get())
+            if self.switch_var3.get() == "on": 
                temp =  self.tabview.get()
                print("ik kom in de if")
                alling_x_for_buttons = 0.50
