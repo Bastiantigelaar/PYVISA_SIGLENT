@@ -54,20 +54,25 @@ class App(customtkinter.CTk):
             phase = float(self.sentryphase.get())
             offset = float(self.sentryoffset.get())
             self.set_value_sinus(amp,fre,phase,offset)
+            time.sleep(0.5)
+            self.set_value_sinus(amp,fre,phase,offset)
             print("De waardes die zijn ingevuld zijn .. " , amp, " ", fre, " ", phase," " ,offset)
         except:
             print("error with reading values of enterd values of sinus")
 
     def get_values_blok(self):
         try:
-            amp = float(self.bentryamplitude.get())
+            #amp = float(self.bentryamplitude.get())
             fre = float(self.bentryfrequenctie.get())
             phase = float(self.bentryphase.get())
             offset = float(self.bentryoffset.get())
             low = float(self.bentrylowlevel.get())
             high = float(self.bentryhighlevel.get())
             duty = float(self.bentrydutycycle.get())
-            print("De waardes die zijn ingevuld zijn .. " , amp, " ", fre, " ", phase," " ,offset, " ", duty, " ", low, " ", high)
+            self.set_value_blok(fre,phase,offset,low,high,duty)
+            time.sleep(0.5)
+            self.set_value_blok(fre,phase,offset,low,high,duty)
+            print("De waardes die zijn ingevuld zijn .. " ,  " ", fre, " ", phase," " ,offset, " ", duty, " ", low, " ", high)
         except:
             print("error with reading values of enterd values of blok")
     
@@ -87,7 +92,7 @@ class App(customtkinter.CTk):
           sweep_start = float(self.swentrystart.get())
           print("the values of the sweep are " , sweep_time , " ", sweep_stop, " ", sweep_start)
           self.set_value_sweep(sweep_time,sweep_stop,sweep_start)
-          time.sleep(0.2)
+          time.sleep(0.5)
           self.set_value_sweep(sweep_time,sweep_stop,sweep_start)
       except:
           print("an error occured reading values of enterd values of sweep")
@@ -99,26 +104,38 @@ class App(customtkinter.CTk):
 
             functie_generator = self.config_functie_generator()
             print("dit is de waarde van de functie generator" , functie_generator)
-            if(offset > 4.5):
-               print("kies een offset lager of gelijk aan 4.5")
-               offset = 4.5
-            elif(phase > 360):
-               phase = 360
-               print("kies een phase kleiner of gelijk aan 360")
-            elif(amp > 20):
-               amp = 20
-               print("kies een amplitude lager of gelijk aan 20")
-            elif(fre > 10000000):
-               fre = 10e6
-               print("kies een frequency lager of gelijk aan 10Mhz")  
             functie_generator.write('C1:BSWV WVTP,SINE')   
             functie_generator.write(f'C1:BSWV FRQ,{fre}')
             functie_generator.write(f'C1:BSWV AMP,{amp}')
             functie_generator.write(f'C1:BSWV OFST,{offset}')
             functie_generator.write(f'C1:BSWV PHSE,{phase}')
+
+            
             print("De ingevulde waarde zijn ", "amp ", amp, " freq", fre)
         except:
             print("an error accured during set function of the function generator")
+    def set_value_blok(self,fre,phase,offset,low,high,duty):
+         try:   
+            functie_generator = self.config_functie_generator()
+            print("dit is de waarde van de functie generator" , functie_generator)
+            amp = high - low
+            functie_generator.write('C1:BSWV WVTP,SQUARE')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV FRQ,{fre}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV HLEV,{high}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV LLEV,{low}') 
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV AMP,{amp}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV OFST,{offset}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV PHSE,{phase}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV DUTY,{duty}') 
+         except:
+             print("the blok waveform could not be set properly")     
 
     def set_value_sweep(self,sweep_time,sweep_stop,sweep_start):
            try:
@@ -196,51 +213,51 @@ class App(customtkinter.CTk):
 
      # amplitude 
 
-        self.labelamplitude = customtkinter.CTkLabel(self.tabview.tab("BLOK"),text="Vul hier de amplitude in ")
-        self.labelamplitude.place(relx = alling_x_for_buttons, rely = 0.20)
+    #    self.labelamplitude = customtkinter.CTkLabel(self.tabview.tab("BLOK"),text="Vul hier de amplitude in ")
+     #   self.labelamplitude.place(relx = alling_x_for_buttons, rely = 0.20)
 
-        self.bentryamplitude = customtkinter.CTkEntry(self.tabview.tab("BLOK"))
-        self.bentryamplitude.place(relx = alling_x_for_entries, rely = 0.20)
+      #  self.bentryamplitude = customtkinter.CTkEntry(self.tabview.tab("BLOK"))
+       # self.bentryamplitude.place(relx = alling_x_for_entries, rely = 0.20)
      # high level
         self.labelhighlevel = customtkinter.CTkLabel(self.tabview.tab("BLOK"),text="Vul hier de high level in ")
-        self.labelhighlevel.place(relx = alling_x_for_buttons, rely = 0.28)
+        self.labelhighlevel.place(relx = alling_x_for_buttons, rely = 0.20)
 
         self.bentryhighlevel = customtkinter.CTkEntry(self.tabview.tab("BLOK"))
-        self.bentryhighlevel.place(relx = alling_x_for_entries, rely = 0.28)
+        self.bentryhighlevel.place(relx = alling_x_for_entries, rely = 0.20)
 
      # low level
         self.labellowlevel = customtkinter.CTkLabel(self.tabview.tab("BLOK"),text="Vul hier de low level in ")
-        self.labellowlevel.place(relx = alling_x_for_buttons, rely = 0.36)
+        self.labellowlevel.place(relx = alling_x_for_buttons, rely = 0.28)
 
         self.bentrylowlevel = customtkinter.CTkEntry(self.tabview.tab("BLOK"))
-        self.bentrylowlevel.place(relx = alling_x_for_entries, rely = 0.36)
+        self.bentrylowlevel.place(relx = alling_x_for_entries, rely = 0.28)
      
      # offset 
         self.labeloffset = customtkinter.CTkLabel(self.tabview.tab("BLOK"),text="Vul hier de offset in ")
-        self.labeloffset.place(relx = alling_x_for_buttons, rely = 0.44)
+        self.labeloffset.place(relx = alling_x_for_buttons, rely = 0.36)
 
         self.bentryoffset = customtkinter.CTkEntry(self.tabview.tab("BLOK"))
-        self.bentryoffset.place(relx = alling_x_for_entries, rely = 0.44)
+        self.bentryoffset.place(relx = alling_x_for_entries, rely = 0.36)
 
      # phase 
 
         self.labelphase = customtkinter.CTkLabel(self.tabview.tab("BLOK"),text="Vul hier de fase in ")
-        self.labelphase.place(relx = alling_x_for_buttons, rely = 0.52)
+        self.labelphase.place(relx = alling_x_for_buttons, rely = 0.44)
 
         self.bentryphase = customtkinter.CTkEntry(self.tabview.tab("BLOK"))
-        self.bentryphase.place(relx = alling_x_for_entries, rely = 0.52)
+        self.bentryphase.place(relx = alling_x_for_entries, rely = 0.44)
      # duty cycle
 
         self.labeldutycycle = customtkinter.CTkLabel(self.tabview.tab("BLOK"),text="Vul hier de duty cycle in")
-        self.labeldutycycle.place(relx = alling_x_for_buttons, rely = 0.60)
+        self.labeldutycycle.place(relx = alling_x_for_buttons, rely = 0.52)
 
         self.bentrydutycycle = customtkinter.CTkEntry(self.tabview.tab("BLOK"))
-        self.bentrydutycycle.place(relx = alling_x_for_entries, rely = 0.60)
+        self.bentrydutycycle.place(relx = alling_x_for_entries, rely = 0.52)
         
      # accept changes 
 
         self.checkbutton = customtkinter.CTkButton(self.tabview.tab("BLOK"), text = "Check", command = self.get_values_blok)
-        self.checkbutton.place(relx = alling_x_for_entries, rely = 0.68)
+        self.checkbutton.place(relx = alling_x_for_entries, rely = 0.60)
 
     def config_ramp(self):
     # CONFIGURATION OF THE RAMP 
@@ -372,7 +389,7 @@ class App(customtkinter.CTk):
                self.swentrystop.place(relx = alling_x_for_entries, rely = 0.28)
 
                self.checkbutton2 = customtkinter.CTkButton(self.tabview.tab(temp), text = "Check", command = self.get_values_sweep)
-               self.checkbutton2.place(relx = alling_x_for_entries, rely = 0.68)     
+               self.checkbutton2.place(relx = alling_x_for_entries, rely = 0.60)     
             else: 
                print("ïk kom in de else ")
                self.labeltime.place_forget()
