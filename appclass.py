@@ -514,12 +514,17 @@ class App(customtkinter.CTk):
         print("switch2 was toggled: ", self.switch_var2.get())
         print("switch3 was toggled: ", self.switch_var3.get())
         print("the current tab" , self.tabview.get())
-        if self.tabview.get() == "SINUS":
-         self.configure_sweep_sinus()
-        elif self.tabview.get() == "BLOK":  
-         self.configure_sweep_blok()
-        elif self.tabview.get() == "RAMP":
-         self.configure_sweep_ramp()
+        name = self.tabview.get()
+        match name:
+               case "SINUS":
+                   self.configure_sweep_sinus()
+               case "BLOK":
+                    self.configure_sweep_blok()
+               case "RAMP":
+                    self.configure_sweep_ramp()
+               case _: 
+                    print("invalid cases /// unknown")
+        
         
     
     
@@ -646,3 +651,4 @@ class App(customtkinter.CTk):
                self.labelstart.place_forget()
                self.swentrystart.place_forget()
                self.checkbutton2.place_forget()
+    
