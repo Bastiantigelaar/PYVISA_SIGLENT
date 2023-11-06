@@ -28,7 +28,6 @@ class App(customtkinter.CTk):
         self.tabview.add("RAMP")
         self.tabview.add("PULSE")
         self.tabview.add("NOISE")
-        self.tabview.add("ARB")
         self.tabview.add("AUTOMATED MODE")
     # set grid level for each tab view    
         self.tabview.tab("SINUS").grid_columnconfigure(0, weight=1) 
@@ -36,9 +35,6 @@ class App(customtkinter.CTk):
         self.tabview.tab("RAMP").grid_columnconfigure(0, weight=1) 
         self.tabview.tab("PULSE").grid_columnconfigure(0, weight=1)
         self.tabview.tab("NOISE").grid_columnconfigure(0, weight=1) 
-        self.tabview.tab("ARB").grid_columnconfigure(0, weight=1)
-        self.tabview.tab("NOISE").grid_columnconfigure(0, weight=1) 
-        self.tabview.tab("ARB").grid_columnconfigure(0, weight=1)
         self.tabview.tab("AUTOMATED MODE").grid_columnconfigure(0, weight=1)
         
     # setup the config modules 
@@ -47,6 +43,7 @@ class App(customtkinter.CTk):
         self.config_blok()
         self.config_ramp()
         self.config_noise()
+        self.config_pulse()
 
     def get_values_sinus(self):
         try:
@@ -109,6 +106,20 @@ class App(customtkinter.CTk):
             self.set_value_noise(stdev,mean)
         except:
             print("an error occured reading values of enterd values of noise")      
+    def get_values_pulse(self):
+         try: 
+            fre = float(self.pentryfrequenctie.get())
+            offset = float(self.pentryoffset.get())
+            low = float(self.pentrylowlevel.get())
+            high = float(self.pentryhighlevel.get())
+            duty = float(self.pentrydutycycle.get())
+            width  = float(self.pentrywidth.get())
+            fall = float(self.pentryfall.get())
+            print("this are the values of the pulse inserted signal " , fre, " " ,offset, " ",low," ",high," ", width, " ", fall)
+            self.set_values_pulse(fre,offset,low,high,width,fall)
+
+         except:
+             print("an error occured reading values of enterd values of the pulse") 
 
     def set_value_sinus(self,amp,fre,phase,offset):
         try:
@@ -205,6 +216,31 @@ class App(customtkinter.CTk):
                print("set is called")
            except:
                print("an error occured during set")
+    def set_values_pulse(self,fre,offset,low,high,width,fall):
+        try:   
+            functie_generator = self.config_functie_generator()
+            print("dit is de waarde van de functie generator" , functie_generator)
+            amp = high - low
+            functie_generator.write('C1:BSWV WVTP,PULSE')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV FRQ,{fre}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV HLEV,{high}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV LLEV,{low}') 
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV AMP,{amp}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV OFST,{offset}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV WIDTH,{width}')
+            time.sleep(0.2)
+            functie_generator.write(f'C1:BSWV FALL,{fall}')
+            time.sleep(0.2)
+            functie_generator.write('C1:OUTP ON')
+        except:
+             print("the pulse waveform could not be set properly") 
+    
        # setup the function generator
     def config_sinus(self):
     # CONFIGURATION OF THE SINUS SIGNAL 
@@ -394,6 +430,75 @@ class App(customtkinter.CTk):
      # check box 
         self.checkbutton = customtkinter.CTkButton(self.tabview.tab("NOISE"), text = "Check", command = self.get_values_noise)
         self.checkbutton.place(relx = alling_x_for_entries, rely = 0.28) 
+    def config_pulse(self):
+      # CONFIGURATION OF THE PULSE SIGNAL 
+     # default values 
+        alling_x_for_buttons = 0.1
+        alling_x_for_entries = 0.28
+     # frequency
+        self.labelfrequenctie = customtkinter.CTkLabel(self.tabview.tab("PULSE"),text="Vul hier de Ferquentie in ")
+        self.labelfrequenctie.place(relx = alling_x_for_buttons, rely = 0.12)
+
+        self.pentryfrequenctie = customtkinter.CTkEntry(self.tabview.tab("PULSE"))
+        self.pentryfrequenctie.place(relx = alling_x_for_entries, rely = 0.12)
+
+     # amplitude 
+
+    #    self.labelamplitude = customtkinter.CTkLabel(self.tabview.tab("BLOK"),text="Vul hier de amplitude in ")
+     #   self.labelamplitude.place(relx = alling_x_for_buttons, rely = 0.20)
+
+      #  self.bentryamplitude = customtkinter.CTkEntry(self.tabview.tab("BLOK"))
+       # self.bentryamplitude.place(relx = alling_x_for_entries, rely = 0.20)
+     # high level
+        self.labelhighlevel = customtkinter.CTkLabel(self.tabview.tab("PULSE"),text="Vul hier de high level in ")
+        self.labelhighlevel.place(relx = alling_x_for_buttons, rely = 0.20)
+
+        self.pentryhighlevel = customtkinter.CTkEntry(self.tabview.tab("PULSE"))
+        self.pentryhighlevel.place(relx = alling_x_for_entries, rely = 0.20)
+
+     # low level
+        self.labellowlevel = customtkinter.CTkLabel(self.tabview.tab("PULSE"),text="Vul hier de low level in ")
+        self.labellowlevel.place(relx = alling_x_for_buttons, rely = 0.28)
+
+        self.pentrylowlevel = customtkinter.CTkEntry(self.tabview.tab("PULSE"))
+        self.pentrylowlevel.place(relx = alling_x_for_entries, rely = 0.28)
+     
+     # offset 
+        self.labeloffset = customtkinter.CTkLabel(self.tabview.tab("PULSE"),text="Vul hier de offset in ")
+        self.labeloffset.place(relx = alling_x_for_buttons, rely = 0.36)
+
+        self.pentryoffset = customtkinter.CTkEntry(self.tabview.tab("PULSE"))
+        self.pentryoffset.place(relx = alling_x_for_entries, rely = 0.36)
+     # duty cycle
+
+        self.labeldutycycle = customtkinter.CTkLabel(self.tabview.tab("PULSE"),text="Vul hier de duty cycle in ")
+        self.labeldutycycle.place(relx = alling_x_for_buttons, rely = 0.44)
+
+        self.pentrydutycycle = customtkinter.CTkEntry(self.tabview.tab("PULSE"))
+        self.pentrydutycycle.place(relx = alling_x_for_entries, rely = 0.44)
+     
+     # pulse width
+        self.labelwidth = customtkinter.CTkLabel(self.tabview.tab("PULSE"),text="Vul hier de pulsewidth in ")
+        self.labelwidth.place(relx = alling_x_for_buttons, rely = 0.52)
+
+        self.pentrywidth = customtkinter.CTkEntry(self.tabview.tab("PULSE"))
+        self.pentrywidth.place(relx = alling_x_for_entries, rely = 0.52)  
+     # pulse fall 
+        self.labelfall = customtkinter.CTkLabel(self.tabview.tab("PULSE"),text="Vul hier de fall time in")
+        self.labelfall.place(relx = alling_x_for_buttons, rely = 0.60)
+
+        self.pentryfall = customtkinter.CTkEntry(self.tabview.tab("PULSE"))
+        self.pentryfall.place(relx = alling_x_for_entries, rely = 0.60)
+
+        
+     # accept changes 
+
+        self.checkbutton = customtkinter.CTkButton(self.tabview.tab("PULSE"), text = "Check", command = self.get_values_pulse)
+        self.checkbutton.place(relx = alling_x_for_entries, rely = 0.68)
+
+
+
+
 
     def config_functie_generator(self):
           try:
@@ -541,4 +646,3 @@ class App(customtkinter.CTk):
                self.labelstart.place_forget()
                self.swentrystart.place_forget()
                self.checkbutton2.place_forget()
-      
