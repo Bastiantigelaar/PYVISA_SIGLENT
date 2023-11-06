@@ -30,9 +30,7 @@ class App(customtkinter.CTk):
         self.tabview.add("NOISE")
         self.tabview.add("ARB")
         self.tabview.add("AUTOMATED MODE")
-          
     # set grid level for each tab view    
-
         self.tabview.tab("SINUS").grid_columnconfigure(0, weight=1) 
         self.tabview.tab("BLOK").grid_columnconfigure(0, weight=1)
         self.tabview.tab("RAMP").grid_columnconfigure(0, weight=1) 
@@ -48,9 +46,6 @@ class App(customtkinter.CTk):
         self.config_sinus()
         self.config_blok()
         self.config_ramp()
-
-
-
 
     def get_values_sinus(self):
         try:
@@ -91,6 +86,8 @@ class App(customtkinter.CTk):
           sweep_stop = float(self.swentrystop.get())
           sweep_start = float(self.swentrystart.get())
           print("the values of the sweep are " , sweep_time , " ", sweep_stop, " ", sweep_start)
+          self.set_value_sweep(sweep_time,sweep_stop,sweep_start)
+          time.sleep(0.2)
           self.set_value_sweep(sweep_time,sweep_stop,sweep_start)
       except:
           print("an error occured reading values of enterd values of sweep")
@@ -138,10 +135,10 @@ class App(customtkinter.CTk):
     # CONFIGURATION OF THE SINUS SIGNAL 
      # sweep on or off 
         self.naam = customtkinter.StringVar(value="SINUS")
-        self.switch_var = customtkinter.StringVar(value="off")
-        self.switch = customtkinter.CTkSwitch(self.tabview.tab("SINUS"), text="sweep mode", command=self.sweep_on,
-                                 variable=self.switch_var, onvalue="on", offvalue="off")
-        self.switch.place(relx = 0, rely = 0)
+        self.switch_var1 = customtkinter.StringVar(value="off")
+        self.switch1 = customtkinter.CTkSwitch(self.tabview.tab("SINUS"), text="sweep mode", command=self.sweep_on,
+                                 variable=self.switch_var1, onvalue="on", offvalue="off")
+        self.switch1.place(relx = 0, rely = 0)
      # default values 
         alling_x_for_buttons = 0.1
         alling_x_for_entries = 0.28
@@ -181,6 +178,12 @@ class App(customtkinter.CTk):
 
     def config_blok(self):
     # CONFIGURATION OF THE BLOK SIGNAL 
+     # sweep on or off 
+        self.naam = customtkinter.StringVar(value="BLOK")
+        self.switch_var2 = customtkinter.StringVar(value="off")
+        self.switch2 = customtkinter.CTkSwitch(self.tabview.tab("BLOK"), text="sweep mode", command=self.sweep_on,
+                                 variable=self.switch_var2, onvalue="on", offvalue="off")
+        self.switch2.place(relx = 0, rely = 0)
      # default values 
         alling_x_for_buttons = 0.1
         alling_x_for_entries = 0.28
@@ -279,51 +282,105 @@ class App(customtkinter.CTk):
         self.checkbutton.place(relx = alling_x_for_entries, rely = 0.54)
     def config_functie_generator(self):
           try:
+            
             rm = pyvisa.ResourceManager() 
             functie_generator = rm.open_resource('USB0::0xF4ED::0xEE3A::SDG08CBC7R0184::0::INSTR') 
             return functie_generator
           except:
             print("functie_generator not found -> error try check_connection.py or search_connection.py on the github page")
+
     def sweep_on(self):
-        print("switch was toggled: ", self.switch_var.get())
-        naam = self.naam.get()
-        print("switch was toggled: ", self.switch_var.get())
-        
-        #naam = "SINUS"
-        if self.switch_var.get() == "on":
-            alling_x_for_buttons = 0.50
-            alling_x_for_entries = 0.78
-          # time value 
-            self.labeltime = customtkinter.CTkLabel(self.tabview.tab(naam),text="Vul hier de tijd in")
-            self.labeltime.place(relx = alling_x_for_buttons, rely = 0.12)
-
-            self.swentrytime = customtkinter.CTkEntry(self.tabview.tab(naam))
-            self.swentrytime.place(relx = alling_x_for_entries, rely = 0.12)
-
-          # start frequency
-            self.labelstart = customtkinter.CTkLabel(self.tabview.tab(naam),text="Vul hier de start frequentie in")
-            self.labelstart.place(relx = alling_x_for_buttons, rely = 0.20)
-
-            self.swentrystart = customtkinter.CTkEntry(self.tabview.tab(naam))
-            self.swentrystart.place(relx = alling_x_for_entries, rely = 0.20)
-          # stop frequency
-            self.labelstop = customtkinter.CTkLabel(self.tabview.tab(naam),text="Vul hier de stop frequentie in")
-            self.labelstop.place(relx = alling_x_for_buttons, rely = 0.28)
-
-            self.swentrystop = customtkinter.CTkEntry(self.tabview.tab(naam))
-            self.swentrystop.place(relx = alling_x_for_entries, rely = 0.28)
-
-            self.checkbutton = customtkinter.CTkButton(self.tabview.tab(naam), text = "Check", command = self.get_values_sweep)
-            self.checkbutton.place(relx = alling_x_for_entries, rely = 0.54)
-
-            print("switch was toggled: ", self.switch_var.get())
-        else: 
-            print("switch was toggled: ", self.switch_var.get())
-            self.labeltime.place_forget()
-            self.swentrytime.place_forget()
+        print("switch1 was toggled: ", self.switch_var1.get())
+        print("switch2 was toggled: ", self.switch_var2.get())
+        print("the current tab" , self.tabview.get())
+        if self.tabview.get() == "SINUS":
+         self.configure_sweep_sinus()
+        elif self.tabview.get() == "BLOK":  
+         self.configure_sweep_blok()
+        else:
+            print("an error") 
+    
+    
+    
+    def configure_sweep_sinus(self):
+            #print( "dit is de naam meegeven", naam)
             
-            self.labelstop.place_forget()
-            self.swentrystop.place_forget()
+            if self.switch_var1.get() == "on": 
+               temp =  self.tabview.get()
+               print("ik kom in de if")
+               alling_x_for_buttons = 0.50
+               alling_x_for_entries = 0.78
+            # time value 
+               self.labeltime = customtkinter.CTkLabel(self.tabview.tab(temp),text="Vul hier de tijd in")
+               self.labeltime.place(relx = alling_x_for_buttons, rely = 0.12)
+
+               self.swentrytime = customtkinter.CTkEntry(self.tabview.tab(temp))
+               self.swentrytime.place(relx = alling_x_for_entries, rely = 0.12)
+
+            # start frequency
+               self.labelstart = customtkinter.CTkLabel(self.tabview.tab(temp),text="Vul hier de start frequentie in")
+               self.labelstart.place(relx = alling_x_for_buttons, rely = 0.20)
+
+               self.swentrystart = customtkinter.CTkEntry(self.tabview.tab(temp))
+               self.swentrystart.place(relx = alling_x_for_entries, rely = 0.20)
+            # stop frequency
+               self.labelstop = customtkinter.CTkLabel(self.tabview.tab(temp),text="Vul hier de stop frequentie in")
+               self.labelstop.place(relx = alling_x_for_buttons, rely = 0.28)
+
+               self.swentrystop = customtkinter.CTkEntry(self.tabview.tab(temp))
+               self.swentrystop.place(relx = alling_x_for_entries, rely = 0.28)
+
+               self.checkbutton2 = customtkinter.CTkButton(self.tabview.tab(temp), text = "Check", command = self.get_values_sweep)
+               self.checkbutton2.place(relx = alling_x_for_entries, rely = 0.54)     
+            else: 
+               print("ïk kom in de else ")
+               self.labeltime.place_forget()
+               self.swentrytime.place_forget()
+               
+               self.labelstop.place_forget()
+               self.swentrystop.place_forget()
+               
+               self.labelstart.place_forget()
+               self.swentrystart.place_forget()
+               self.checkbutton2.place_forget()
+    def configure_sweep_blok(self):
+            #print( "dit is de naam meegeven", naam)
             
-            self.labelstart.place_forget()
-            self.swentrystart.place_forget()
+            if self.switch_var2.get() == "on": 
+               temp =  self.tabview.get()
+               print("ik kom in de if")
+               alling_x_for_buttons = 0.50
+               alling_x_for_entries = 0.78
+            # time value 
+               self.labeltime = customtkinter.CTkLabel(self.tabview.tab(temp),text="Vul hier de tijd in")
+               self.labeltime.place(relx = alling_x_for_buttons, rely = 0.12)
+
+               self.swentrytime = customtkinter.CTkEntry(self.tabview.tab(temp))
+               self.swentrytime.place(relx = alling_x_for_entries, rely = 0.12)
+
+            # start frequency
+               self.labelstart = customtkinter.CTkLabel(self.tabview.tab(temp),text="Vul hier de start frequentie in")
+               self.labelstart.place(relx = alling_x_for_buttons, rely = 0.20)
+
+               self.swentrystart = customtkinter.CTkEntry(self.tabview.tab(temp))
+               self.swentrystart.place(relx = alling_x_for_entries, rely = 0.20)
+            # stop frequency
+               self.labelstop = customtkinter.CTkLabel(self.tabview.tab(temp),text="Vul hier de stop frequentie in")
+               self.labelstop.place(relx = alling_x_for_buttons, rely = 0.28)
+
+               self.swentrystop = customtkinter.CTkEntry(self.tabview.tab(temp))
+               self.swentrystop.place(relx = alling_x_for_entries, rely = 0.28)
+
+               self.checkbutton2 = customtkinter.CTkButton(self.tabview.tab(temp), text = "Check", command = self.get_values_sweep)
+               self.checkbutton2.place(relx = alling_x_for_entries, rely = 0.68)     
+            else: 
+               print("ïk kom in de else ")
+               self.labeltime.place_forget()
+               self.swentrytime.place_forget()
+               
+               self.labelstop.place_forget()
+               self.swentrystop.place_forget()
+               
+               self.labelstart.place_forget()
+               self.swentrystart.place_forget()
+               self.checkbutton2.place_forget()
