@@ -29,7 +29,6 @@ class App(customtkinter.CTk):
         self.tabview.add("PULSE")
         self.tabview.add("NOISE")
         self.tabview.add("ARB")
-        self.tabview.add("SWEEP MODE")
         self.tabview.add("AUTOMATED MODE")
           
     # set grid level for each tab view    
@@ -42,7 +41,6 @@ class App(customtkinter.CTk):
         self.tabview.tab("ARB").grid_columnconfigure(0, weight=1)
         self.tabview.tab("NOISE").grid_columnconfigure(0, weight=1) 
         self.tabview.tab("ARB").grid_columnconfigure(0, weight=1)
-        self.tabview.tab("SWEEP MODE").grid_columnconfigure(0, weight=1) 
         self.tabview.tab("AUTOMATED MODE").grid_columnconfigure(0, weight=1)
         
     # setup the config modules 
@@ -87,6 +85,16 @@ class App(customtkinter.CTk):
             print("De waardes die zijn ingevuld zijn .. " , amp, " ", fre, " ", phase," " ,offset)
         except:
             print("error with reading values of enterd values of blok")
+    def get_values_sweep(self):
+      try:
+          sweep_time = float(self.swentrytime.get())
+          sweep_stop = float(self.swentrystop.get())
+          sweep_start = float(self.swentrystart.get())
+          print("the values of the sweep are " , sweep_time , " ", sweep_stop, " ", sweep_start)
+          self.set_value_sweep(sweep_time,sweep_stop,sweep_start)
+      except:
+          print("an error occured reading values of enterd values of sweep")
+
     def set_value_sinus(self,amp,fre,phase,offset):
         try:
             print("de ontvange waardes zijn ....")
@@ -105,8 +113,7 @@ class App(customtkinter.CTk):
                print("kies een amplitude lager of gelijk aan 20")
             elif(fre > 10000000):
                fre = 10e6
-               print("kies een frequency lager of gelijk aan 10Mhz")
-            
+               print("kies een frequency lager of gelijk aan 10Mhz")  
             functie_generator.write('C1:BSWV WVTP,SINE')   
             functie_generator.write(f'C1:BSWV FRQ,{fre}')
             functie_generator.write(f'C1:BSWV AMP,{amp}')
@@ -115,6 +122,17 @@ class App(customtkinter.CTk):
             print("De ingevulde waarde zijn ", "amp ", amp, " freq", fre)
         except:
             print("an error accured during set function of the function generator")
+
+    def set_value_sweep(self,sweep_time,sweep_stop,sweep_start):
+           try:
+               functie_generator = self.config_functie_generator()
+               functie_generator.write(f'C1:SWWV TIME,{sweep_time}') 
+               functie_generator.write(f'C1:SWWV STOP,{sweep_stop}') 
+               functie_generator.write(f'C1:SWWV START,{sweep_start}')  
+               functie_generator.write('C1:SWWV STATE,ON')
+               print("set is called")
+           except:
+               print("an error occured during set")
        # setup the function generator
     def config_sinus(self):
     # CONFIGURATION OF THE SINUS SIGNAL 
@@ -294,6 +312,10 @@ class App(customtkinter.CTk):
 
             self.swentrystop = customtkinter.CTkEntry(self.tabview.tab(naam))
             self.swentrystop.place(relx = alling_x_for_entries, rely = 0.28)
+
+            self.checkbutton = customtkinter.CTkButton(self.tabview.tab(naam), text = "Check", command = self.get_values_sweep)
+            self.checkbutton.place(relx = alling_x_for_entries, rely = 0.54)
+
             print("switch was toggled: ", self.switch_var.get())
         else: 
             print("switch was toggled: ", self.switch_var.get())
