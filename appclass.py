@@ -515,12 +515,23 @@ class App(customtkinter.CTk):
         print("switch3 was toggled: ", self.switch_var3.get())
         print("the current tab" , self.tabview.get())
         name = self.tabview.get()
+        print(" dit is switcgh 1 ", self.switch_var1.get())
+        print(" dit is switcgh 2 ", self.switch_var2.get())
+        
         match name:
                case "SINUS":
+                   #self.switch_var1.get()
+                   #self.switch_var2 = customtkinter.StringVar(value="off")
+                   #self.switch_var3 = customtkinter.StringVar(value="off")
                    self.configure_sweep_sinus()
                case "BLOK":
-                    self.configure_sweep_blok()
+                   #self.switch_var1 = customtkinter.StringVar(value="off")
+                   #self.switch_var3 = customtkinter.StringVar(value="off")
+                   #print("swutcg2 ", self.switch_var2.get())
+                   self.configure_sweep_blok()
                case "RAMP":
+                    #self.switch_var1 = customtkinter.StringVar(value="off")
+                    #self.switch_var2 = customtkinter.StringVar(value="off")
                     self.configure_sweep_ramp()
                case _: 
                     print("invalid cases /// unknown")
