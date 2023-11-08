@@ -1,3 +1,6 @@
+
+# version 1 - can be deleted  !!!!!!!11
+
 # simpele GUI voor een functie generator 
 # gemaakt door Bastian Tigelaar
 # pyvisa related stuff
