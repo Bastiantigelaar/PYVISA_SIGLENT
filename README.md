@@ -23,6 +23,8 @@ the programming guides:
 TDS200,TDS1000, TDS2000, and TPS2000 Series Digital Oscilloscopes, (working on the hantek scope)
 ## function generators: 
 all siglent generators
+note:
+not every function has been tested.
 
 # installs that are needed 
 ## first install
