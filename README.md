@@ -29,6 +29,8 @@ note:
 not every function has been tested.
 
 # installs that are needed 
+Keep in mind that pip and python are needed before the install work.
+
 ## first install
 first install:
 ```bash
