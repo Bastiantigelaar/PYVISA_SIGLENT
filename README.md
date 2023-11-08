@@ -6,11 +6,6 @@
 
 # The scope GUI
 
-based on the programming guide of siglent and tektronix.
-
-## [programming guide siglent](https://siglentna.com/USA_website_2014/Documents/Program_Material/SDG_ProgrammingGuide_PG_E03B.pdf)
-## [programming guide tektronix](https://www.tek.com/en/oscilloscope/tds1000-manual)
-
 
 # currently working on 
 - automated mode
@@ -18,7 +13,7 @@ based on the programming guide of siglent and tektronix.
 - when finished --> scope with automated mode...
 
 # documentation
-All customertkinter code comes from the documantation of there [github](https://github.com/TomSchimansky/CustomTkinter)
+All customertkinter code comes from the documantation of the [github of TomSchimansky](https://github.com/TomSchimansky/CustomTkinter)
 the programming guides:
 ## [programming guide siglent](https://siglentna.com/USA_website_2014/Documents/Program_Material/SDG_ProgrammingGuide_PG_E03B.pdf)
 ## [programming guide tektronix](https://www.tek.com/en/oscilloscope/tds1000-manual)
@@ -39,5 +34,10 @@ pip install pyvisa
 second install:
 ```bash
 pip install numpy 
+```
+## third isntall
+third install: 
+```bash
+pip install customertkinter 
 ```
 
