@@ -5,7 +5,8 @@
 
 
 # The scope GUI
-
+disclaimer:
+Do not send to quick command to the device. It can crash hard. (speaking from own experience:) )
 
 # currently working on 
 - automated mode
