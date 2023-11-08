@@ -38,7 +38,7 @@ second install:
 ```bash
 pip install numpy 
 ```
-## third isntall
+## third install
 third install: 
 ```bash
 pip install customertkinter 
