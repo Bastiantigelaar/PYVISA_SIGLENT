@@ -1,7 +1,8 @@
 # Basic GUI with PYVISA for scope and function generator
 made by: Bastian Tigelaar (student)
 # The function generator GUI
-![image](https://github.com/basktanios/PYVISA_SIGLENT/assets/108866346/6659647c-a9b3-4b3d-a9be-a50931a64af1)
+![image](![image](https://github.com/basktanios/PYVISA_SIGLENT/assets/108866346/1e387148-af1e-44b6-b2a9-e2751ee0e576)
+)
 
 # The scope GUI
 ## important:
