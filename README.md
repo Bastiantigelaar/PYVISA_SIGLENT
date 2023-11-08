@@ -6,8 +6,10 @@ made by: Bastian Tigelaar (student)
 
 
 # The scope GUI
-disclaimer:
-Do not send to quick command to the device. It can not handel really fast commands, therefor some delays are made, see wiki of this github page. (speaking from own experience:) )
+## important:
+
+- the main.py runs the gui-
+- the magic is placed in appclass.py
 
 # currently working on 
 - automated mode
