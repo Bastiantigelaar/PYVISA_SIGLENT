@@ -8,7 +8,7 @@ made by: Bastian Tigelaar (student)
 # The scope GUI
 ## important:
 
-- the main.py runs the gui-
+- the main.py runs the gui
 - the magic is placed in appclass.py
 
 # currently working on 
