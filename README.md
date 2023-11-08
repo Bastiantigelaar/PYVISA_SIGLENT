@@ -19,7 +19,7 @@ made by: Bastian Tigelaar (student)
 # documentation
 see [wiki](https://github.com/basktanios/PYVISA_SIGLENT/wiki) page of the gitub
 All customertkinter code comes from the documantation of the [github of TomSchimansky](https://github.com/TomSchimansky/CustomTkinter)
-the programming guides:
+# the programming guides:
 ## [programming guide siglent](https://siglentna.com/USA_website_2014/Documents/Program_Material/SDG_ProgrammingGuide_PG_E03B.pdf)
 ## [programming guide tektronix](https://www.tek.com/en/oscilloscope/tds1000-manual)
 
