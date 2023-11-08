@@ -7,6 +7,10 @@
 # The scope GUI
 
 based on the programming guide of siglent and tektronix.
+[siglent] (https://siglentna.com/USA_website_2014/Documents/Program_Material/SDG_ProgrammingGuide_PG_E03B.pdf)
+[tektronix](https://www.tek.com/en/oscilloscope/tds1000-manual)
+
+
 # currently working on 
 replacing all the tkinter with customtkinter, update: the use of python classes
 
