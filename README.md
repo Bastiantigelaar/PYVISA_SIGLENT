@@ -17,6 +17,7 @@ made by: Bastian Tigelaar (student)
 - when finished --> scope with automated mode...
 
 # documentation
+see [wiki](https://github.com/basktanios/PYVISA_SIGLENT/wiki) page of the gitub
 All customertkinter code comes from the documantation of the [github of TomSchimansky](https://github.com/TomSchimansky/CustomTkinter)
 the programming guides:
 ## [programming guide siglent](https://siglentna.com/USA_website_2014/Documents/Program_Material/SDG_ProgrammingGuide_PG_E03B.pdf)
