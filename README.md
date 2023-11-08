@@ -13,7 +13,7 @@ based on the programming guide of siglent and tektronix.
 
 
 # currently working on 
-replacing all the tkinter with customtkinter, update: the use of python classes
+automated mode, better structure of code, when finished --> scope
 
 # documentation
 all customertkinter code comes from the documantation of there [github](https://github.com/TomSchimansky/CustomTkinter)
