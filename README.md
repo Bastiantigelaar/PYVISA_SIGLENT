@@ -11,7 +11,7 @@ made by: Bastian Tigelaar (student)
 - the magic is placed in appclass.py
 
 # currently working on 
-- automated mode
+- automated mode --> hantek scope see file
 - better structure of code, (oop)
 - when finished --> scope with automated mode...
 
