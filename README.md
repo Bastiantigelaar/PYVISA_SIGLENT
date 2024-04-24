@@ -46,6 +46,6 @@ pip install numpy
 ## third install
 third install: 
 ```bash
-pip install customertkinter 
+pip install customtkinter
 ```
 
